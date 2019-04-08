@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"AT Shell (not for importing!)"
+"""
+AT Shell (not for importing!)
+"""
 import os
 from pathlib import Path
 import shlex
@@ -16,8 +18,10 @@ from atshell import ShellBase
 
 
 class ATShell(ShellBase):
-    """AT Shell is minimalistic shell
-which implements some basic UNIX commands."""
+    """
+    AT Shell is minimalistic shell
+    which implements some basic UNIX commands.
+    """
     intro = "Welcome to AT Shell!\nType 'help' or '?' to list commands."
     prompt = "$ "
 
@@ -32,27 +36,19 @@ which implements some basic UNIX commands."""
         self.change_cwd(Path.cwd())
 
     def change_cwd(self, path):
-        "Change current working directory (CWD)"
+        """
+        Change current working directory (CWD)
+        """
         self.cwd = path
         self.prompt = (colorama.Fore.BLUE + str(path)
                        + colorama.Fore.RESET + "$ ")
 
     def process_path(self, arg):
-        """Convert relative path to absolute
-(Please do 'shlex.split' before processing!)"""
+        """
+        Convert relative path to absolute
+        (Please do 'shlex.split' before processing!)
+        """
         return self.cwd.joinpath(arg).resolve()
-
-    # pylint: disable=unused-argument,invalid-name
-    @staticmethod
-    def do_EOF(arg):
-        "Exit from shell"
-        return True
-
-    # pylint: disable=unused-argument
-    @staticmethod
-    def do_exit(arg):
-        "Exit from shell"
-        return True
 
     def do_cd(self, arg):
         """Usage: cd <DIR>
@@ -91,7 +87,7 @@ Copy file SRC to path DST (file or directory)."""
         shutil.copy2(str(src), str(dst))
 
     def do_echo(self, arg):
-        "Print remaining part of line."
+        """Print remaining part of line."""
         self.stdout.write(arg + '\n')
 
     def do_ls(self, arg):
@@ -157,7 +153,7 @@ Move file SRC to path DST (file or directory)."""
         shutil.move(str(src), str(dst))
 
     def do_pwd(self, arg):
-        "Print path to the current directory"
+        """Print path to the current directory"""
         self.stdout.write(str(self.cwd) + '\n')
 
     def do_rm(self, arg):

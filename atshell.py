@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-"""This module provides class ShellBase which can be used for
-creating advanced shells."""
+"""
+This module provides class ShellBase which can be used for
+creating advanced shells.
+"""
 import cmd
 # from codecs import getdecoder, getencoder, getreader, getwriter,\
 # StreamRecoder
@@ -15,14 +17,16 @@ import colorama
 
 
 class ShellBase(cmd.Cmd):
-    """Base class that extends cmd.Cmd with:
-1) Colored output
-2) Separate handling of stdout and stderr
-3) Dynamic loading of commands from specified directory
-3.1) Path to the directory should be specified in "package-style"
-(It is used as 'package' parameter in importlib.import_module)
-3.2) If command exists but is not loaded, it will be loaded AUTOMATICALLY!
-4) CTRL-C handling"""
+    """
+    Base class that extends cmd.Cmd with:
+    1) Colored output
+        2) Separate handling of stdout and stderr
+    3) Dynamic loading of commands from specified directory
+    3.1) Path to the directory should be specified in "package-style"
+    (It is used as 'package' parameter in importlib.import_module)
+    3.2) If command exists but is not loaded, it will be loaded AUTOMATICALLY!
+    4) CTRL-C handling
+    """
     colored_output = False
     # Original streams (from __init__)
     orig_stdin, orig_stdout, orig_stderr = None, None, None
@@ -96,6 +100,9 @@ class ShellBase(cmd.Cmd):
         cmd_name = self.parseline(line)[0]
         if not cmd_name:
             return line
+        if cmd_name == "EOF":
+            return "exit"
+
         try:
             getattr(self, "do_" + cmd_name)
         except AttributeError:
@@ -113,6 +120,12 @@ class ShellBase(cmd.Cmd):
     def get_names(self):
         # Small patch needed for "dynamically loaded commands"
         return dir(self)
+
+    # pylint: disable=unused-argument
+    @staticmethod
+    def do_exit(arg):
+        """Exit from shell"""
+        return True
 
     def do_load(self, arg, called_from_precmd=False):
         # pylint: disable=missing-docstring
@@ -192,7 +205,9 @@ cannot be unloaded\n""".format(arg))
         del self.dyn_commands[arg]
 
     def help_load(self):
-        "Print help for 'load' command."
+        """
+        Print help for 'load' command.
+        """
         self.stdout.write("""Usage: load <ARG>
 Try to (re)load command ARG from directory './{0}'.\n"""
                           .format(self.dyn_commands_dir.replace('.', '/')))

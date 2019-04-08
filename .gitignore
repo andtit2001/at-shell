@@ -1,4 +1,5 @@
 .vscode
+__pycache__
 bin/__pycache__
 error.log
 pylintrc

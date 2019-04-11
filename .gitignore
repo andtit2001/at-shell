@@ -1,0 +1,7 @@
+.vscode
+__pycache__
+bin/__pycache__
+error.log
+pylintrc
+temp_code.py
+venv
